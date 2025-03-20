@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CalmSpace - Novo Layout</title>
+    <title>CalmSpace</title>
     <style>
         body {
             margin: 0;
@@ -12,12 +12,10 @@
             background: linear-gradient(45deg, #a7f3d0, #c4b5fd, #bae6fd);
             background-size: 300% 300%;
             animation: gradientBG 20s ease infinite;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
         }
 
@@ -27,11 +25,38 @@
             100% { background-position: 0% 50%; }
         }
 
-        .container {
+        header {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
             text-align: center;
             color: #fff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            width: 100%;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9em;
+            width: 100%;
+            margin-top: auto;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer a:hover { text-decoration: underline; }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             max-width: 100%;
         }
 
@@ -40,7 +65,7 @@
             flex-wrap: wrap;
             justify-content: center;
             margin: 15px 0;
-            gap: 10px;
+            gap: 15px;
         }
 
         .sound-button {
@@ -87,18 +112,41 @@
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .scribble-btn {
-            padding: 8px 12px;
+        .clear-btn {
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: #60a5fa;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.1s;
         }
+        .clear-btn:hover { background: #3b82f6; }
+        .clear-btn:active { transform: scale(0.95); }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.2s, transform 0.2s;
+        }
+        .color-option:hover { border: 2px solid #fff; transform: scale(1.1); }
+        .color-option.selected { border: 2px solid #000; }
 
         .piano {
             display: flex;
@@ -113,14 +161,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.1s;
         }
-        .key.white { background: #fff; }
+        .key.white { background: hsl(0, 70%, 90%); }
         .key.black { 
             width: 25px;
             height: 80px;
-            background: #333;
             margin-left: -12.5px;
             margin-right: -12.5px;
             z-index: 1;
+            background: hsl(0, 50%, 30%);
         }
         .key:active { transform: scale(0.95); }
 
@@ -135,7 +183,9 @@
             color: #fff;
             cursor: pointer;
             z-index: 20;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+        .mute-btn:hover { background: #dc2626; }
 
         @media (max-width: 600px) {
             .sound-button, .knob { width: 50px; height: 50px; }
@@ -144,13 +194,17 @@
             .key.black { width: 20px; height: 60px; margin-left: -10px; margin-right: -10px; }
             h1 { font-size: 1.5em; }
             p { font-size: 0.9em; }
+            .row { gap: 10px; }
+            .controls { gap: 10px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>CalmSpace</h1>
-        <p>Brinque e encontre sua calma</p>
+        <p>Um espaço para relaxar e se divertir</p>
+    </header>
+    <div class="container">
         <div class="row">
             <button class="sound-button" id="btn1"></button>
             <button class="sound-button" id="btn2"></button>
@@ -160,8 +214,8 @@
             <div class="coloring-area"><canvas id="coloring-canvas"></canvas></div>
         </div>
         <div class="controls">
-            <button class="scribble-btn" id="clear-coloring">Limpar Colorir</button>
-            <input type="color" id="color-picker" value="#ff6b6b">
+            <button class="clear-btn" id="clear-coloring">Limpar Colorir</button>
+            <div class="color-picker" id="color-picker"></div>
         </div>
         <div class="row">
             <div class="knob" id="knob1"></div>
@@ -172,252 +226,332 @@
             <div class="scribble-area"><canvas id="scribble-canvas"></canvas></div>
         </div>
         <div class="controls">
-            <button class="scribble-btn" id="clear-scribble">Limpar Rabiscos</button>
+            <button class="clear-btn" id="clear-scribble">Limpar Rabiscos</button>
             <input type="range" id="line-width" min="1" max="20" value="5">
         </div>
         <div class="row">
             <div class="piano" id="piano"></div>
         </div>
     </div>
+    <footer>
+        <p>Criado com ❤️ por <a href="https://dionisio.dev" target="_blank">Dionísio</a> com xAI | 2025</p>
+    </footer>
     <button class="mute-btn" id="mute-btn">Mute</button>
 
     <script>
-        // Sons
-        const sounds = {
-            btn1: new Audio('sounds/button-38.mp3'),
-            btn2: new Audio('sounds/bloop-1.mp3'),
-            btn3: new Audio('sounds/button-3.mp3'),
-            knob1: new Audio('https://www.myinstants.com/media/sounds/click.mp3'),
-            knob2: new Audio('sounds/happy-pop-1.mp3'),
-            knob3: new Audio('sounds/multi-pop-1.mp3'),
-            fill: new Audio('sounds/multi-pop-1.mp3')
-        };
-        let isMuted = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sons
+            const sounds = {
+                btn1: new Audio('sounds/button-38.mp3'),
+                btn2: new Audio('sounds/bloop-1.mp3'),
+                btn3: new Audio('sounds/button-3.mp3'),
+                knob1: new Audio('https://www.myinstants.com/media/sounds/click.mp3'),
+                knob2: new Audio('sounds/happy-pop-1.mp3'),
+                knob3: new Audio('sounds/multi-pop-1.mp3'),
+                fill: new Audio('sounds/multi-pop-1.mp3')
+            };
+            let isMuted = false;
 
-        // Mute
-        const muteBtn = document.getElementById('mute-btn');
-        muteBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
-            muteBtn.style.background = isMuted ? '#22c55e' : '#ef4444';
-        });
-
-        function playSound(sound) {
-            if (!isMuted) {
-                sound.currentTime = 0;
-                sound.play();
+            // Mute
+            const muteBtn = document.getElementById('mute-btn');
+            if (muteBtn) {
+                muteBtn.addEventListener('click', () => {
+                    isMuted = !isMuted;
+                    muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
+                    muteBtn.style.background = isMuted ? '#22c55e' : '#ef4444';
+                });
+            } else {
+                console.error('Elemento mute-btn não encontrado!');
             }
-        }
 
-        // Botões sonoros com mudança de cor
-        document.querySelectorAll('.sound-button').forEach(btn => {
-            btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
-            btn.addEventListener('click', () => {
-                btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
-                playSound(sounds[btn.id]);
-            });
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
-                playSound(sounds[btn.id]);
-            });
-        });
-
-        // Knobs giratórios
-        function setupKnob(knobId, soundKey) {
-            const knob = document.getElementById(knobId);
-            let isDragging = false;
-            let angle = 0;
-
-            const startDrag = () => { isDragging = true; };
-            const stopDrag = () => { isDragging = false; };
-            const drag = (e) => {
-                if (isDragging) {
-                    angle += 5;
-                    knob.style.transform = `rotate(${angle}deg)`;
-                    playSound(sounds[soundKey]);
+            function playSound(sound) {
+                if (!isMuted) {
+                    sound.currentTime = 0;
+                    sound.play();
                 }
-            };
-
-            knob.addEventListener('mousedown', startDrag);
-            knob.addEventListener('touchstart', (e) => { e.preventDefault(); startDrag(); });
-            document.addEventListener('mouseup', stopDrag);
-            document.addEventListener('touchend', stopDrag);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                drag({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY });
-            });
-        }
-        setupKnob('knob1', 'knob1');
-        setupKnob('knob2', 'knob2');
-        setupKnob('knob3', 'knob3');
-
-        // Área de colorir
-        const coloringCanvas = document.getElementById('coloring-canvas');
-        const coloringCtx = coloringCanvas.getContext('2d');
-        const clearColoringBtn = document.getElementById('clear-coloring');
-        const colorPicker = document.getElementById('color-picker');
-        coloringCanvas.width = 400;
-        coloringCanvas.height = 200;
-
-        function drawRandomLines() {
-            coloringCtx.clearRect(0, 0, coloringCanvas.width, coloringCanvas.height);
-            coloringCtx.strokeStyle = '#000';
-            coloringCtx.lineWidth = 1;
-
-            for (let i = 0; i < 20; i++) {
-                coloringCtx.beginPath();
-                coloringCtx.moveTo(Math.random() * coloringCanvas.width, Math.random() * coloringCanvas.height);
-                coloringCtx.lineTo(Math.random() * coloringCanvas.width, Math.random() * coloringCanvas.height);
-                coloringCtx.stroke();
             }
-        }
-        drawRandomLines();
 
-        function floodFill(x, y, fillColor) {
-            const imageData = coloringCtx.getImageData(0, 0, coloringCanvas.width, coloringCanvas.height);
-            const data = imageData.data;
-            const targetColor = getPixelColor(x, y, data);
-            if (colorsMatch(targetColor, hexToRgb(fillColor))) return;
-
-            const stack = [[x, y]];
-            while (stack.length) {
-                const [currX, currY] = stack.pop();
-                const pos = (currY * coloringCanvas.width + currX) * 4;
-                if (currX < 0 || currX >= coloringCanvas.width || currY < 0 || currY >= coloringCanvas.height) continue;
-                if (!colorsMatch(getPixelColor(currX, currY, data), targetColor)) continue;
-
-                data[pos] = hexToRgb(fillColor)[0];
-                data[pos + 1] = hexToRgb(fillColor)[1];
-                data[pos + 2] = hexToRgb(fillColor)[2];
-                data[pos + 3] = 255;
-
-                stack.push([currX + 1, currY]);
-                stack.push([currX - 1, currY]);
-                stack.push([currX, currY + 1]);
-                stack.push([currX, currY - 1]);
-            }
-            coloringCtx.putImageData(imageData, 0, 0);
-            playSound(sounds.fill);
-        }
-
-        function getPixelColor(x, y, data) {
-            const pos = (y * coloringCanvas.width + x) * 4;
-            return [data[pos], data[pos + 1], data[pos + 2], data[pos + 3]];
-        }
-
-        function colorsMatch(c1, c2) {
-            return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2] && c1[3] === c2[3];
-        }
-
-        function hexToRgb(hex) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return [r, g, b, 255];
-        }
-
-        coloringCanvas.addEventListener('click', (e) => {
-            const rect = coloringCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            floodFill(Math.floor(x), Math.floor(y), colorPicker.value);
-        });
-        coloringCanvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const rect = coloringCanvas.getBoundingClientRect();
-            const x = e.touches[0].clientX - rect.left;
-            const y = e.touches[0].clientY - rect.top;
-            floodFill(Math.floor(x), Math.floor(y), colorPicker.value);
-        });
-
-        clearColoringBtn.addEventListener('click', () => {
-            drawRandomLines();
-            playSound(sounds.btn1);
-        });
-
-        // Área de rabiscos
-        const scribbleCanvas = document.getElementById('scribble-canvas');
-        const scribbleCtx = scribbleCanvas.getContext('2d');
-        const lineWidth = document.getElementById('line-width');
-        const clearScribbleBtn = document.getElementById('clear-scribble');
-        scribbleCanvas.width = 400;
-        scribbleCanvas.height = 200;
-        let isDrawing = false;
-
-        scribbleCtx.lineCap = 'round';
-        scribbleCtx.lineJoin = 'round';
-
-        function startDrawing(e) {
-            isDrawing = true;
-            scribbleCtx.beginPath();
-            scribbleCtx.moveTo(e.offsetX || e.touches[0].clientX - scribbleCanvas.offsetLeft, 
-                              e.offsetY || e.touches[0].clientY - scribbleCanvas.offsetTop);
-            scribbleCtx.strokeStyle = colorPicker.value;
-            scribbleCtx.lineWidth = lineWidth.value;
-            playSound(sounds.knob3);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const x = e.offsetX || e.touches[0].clientX - scribbleCanvas.offsetLeft;
-            const y = e.offsetY || e.touches[0].clientY - scribbleCanvas.offsetTop;
-            scribbleCtx.lineTo(x, y);
-            scribbleCtx.stroke();
-        }
-
-        function stopDrawing() { isDrawing = false; }
-
-        scribbleCanvas.addEventListener('mousedown', startDrawing);
-        scribbleCanvas.addEventListener('mousemove', draw);
-        scribbleCanvas.addEventListener('mouseup', stopDrawing);
-        scribbleCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); });
-        scribbleCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
-        scribbleCanvas.addEventListener('touchend', stopDrawing);
-
-        clearScribbleBtn.addEventListener('click', () => {
-            scribbleCtx.clearRect(0, 0, scribbleCanvas.width, scribbleCanvas.height);
-            playSound(sounds.btn1);
-        });
-
-        // Piano
-        const piano = document.getElementById('piano');
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']; // Escala simples
-        const blackNotes = [1, 3, 6]; // Posições das teclas pretas
-
-        notes.forEach((note, index) => {
-            const key = document.createElement('button');
-            key.className = `key ${blackNotes.includes(index) ? 'black' : 'white'}`;
-            key.dataset.note = note;
-            piano.appendChild(key);
-
-            key.addEventListener('click', () => playNote(note));
-            key.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                playNote(note);
+            // Botões sonoros com mudança de cor
+            document.querySelectorAll('.sound-button').forEach(btn => {
+                btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
+                btn.addEventListener('click', () => {
+                    btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
+                    playSound(sounds[btn.id]);
+                });
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
+                    playSound(sounds[btn.id]);
+                });
             });
+
+            // Knobs giratórios
+            function setupKnob(knobId, soundKey) {
+                const knob = document.getElementById(knobId);
+                let isDragging = false;
+                let angle = 0;
+
+                const startDrag = () => { isDragging = true; };
+                const stopDrag = () => { isDragging = false; };
+                const drag = (e) => {
+                    if (isDragging) {
+                        angle += 5;
+                        knob.style.transform = `rotate(${angle}deg)`;
+                        playSound(sounds[soundKey]);
+                    }
+                };
+
+                knob.addEventListener('mousedown', startDrag);
+                knob.addEventListener('touchstart', (e) => { e.preventDefault(); startDrag(); });
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchend', stopDrag);
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    drag({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY });
+                });
+            }
+            setupKnob('knob1', 'knob1');
+            setupKnob('knob2', 'knob2');
+            setupKnob('knob3', 'knob3');
+
+            // Color Picker Customizado
+            const colorPicker = document.getElementById('color-picker');
+            const colors = [
+                '#ff6b6b', '#4ecdc4', '#45b7d1', '#96c93d', '#f7d794',
+                '#ff9ff3', '#54a0ff', '#00d2d3', '#e84393', '#a29bfe'
+            ];
+            let selectedColor = colors[0];
+
+            colors.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.style.background = color;
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedColor = color;
+                });
+                colorPicker.appendChild(option);
+            });
+            colorPicker.children[0].classList.add('selected');
+
+            // Área de colorir
+            const coloringCanvas = document.getElementById('coloring-canvas');
+            const coloringCtx = coloringCanvas.getContext('2d');
+            const clearColoringBtn = document.getElementById('clear-coloring');
+            coloringCanvas.width = 400;
+            coloringCanvas.height = 200;
+
+            function drawRandomAbstractShapes() {
+                coloringCtx.clearRect(0, 0, coloringCanvas.width, coloringCanvas.height);
+                coloringCtx.strokeStyle = '#000';
+                coloringCtx.lineWidth = 1;
+
+                const shapeCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 formas
+                for (let i = 0; i < shapeCount; i++) {
+                    const shapeType = Math.floor(Math.random() * 4);
+                    coloringCtx.beginPath();
+
+                    if (shapeType === 0) {
+                        // Curva suave horizontal
+                        const y = Math.random() * coloringCanvas.height;
+                        coloringCtx.moveTo(0, y);
+                        coloringCtx.quadraticCurveTo(200, y + (Math.random() * 100 - 50), 400, y);
+                        coloringCtx.lineTo(400, coloringCanvas.height);
+                        coloringCtx.lineTo(0, coloringCanvas.height);
+                        coloringCtx.closePath();
+                    } else if (shapeType === 1) {
+                        // Círculo ondulado
+                        const cx = Math.random() * 400;
+                        const cy = Math.random() * 200;
+                        const r = Math.random() * 50 + 20;
+                        for (let a = 0; a < 360; a += 10) {
+                            const rad = (a * Math.PI) / 180;
+                            const radius = r + Math.sin(rad * (Math.random() * 5 + 2)) * 10;
+                            const x = cx + radius * Math.cos(rad);
+                            const y = cy + radius * Math.sin(rad);
+                            if (a === 0) coloringCtx.moveTo(x, y);
+                            else coloringCtx.lineTo(x, y);
+                        }
+                        coloringCtx.closePath();
+                    } else if (shapeType === 2) {
+                        // Ondas verticais
+                        const xStart = Math.random() * 400;
+                        coloringCtx.moveTo(xStart, 0);
+                        for (let x = xStart; x < xStart + 100 && x < 400; x += 20) {
+                            coloringCtx.quadraticCurveTo(x + 10, 100, x + 20, 0);
+                        }
+                        coloringCtx.lineTo(xStart + 100 > 400 ? 400 : xStart + 100, coloringCanvas.height);
+                        coloringCtx.lineTo(xStart, coloringCanvas.height);
+                        coloringCtx.closePath();
+                    } else {
+                        // Forma orgânica
+                        const points = Math.floor(Math.random() * 5) + 3;
+                        coloringCtx.moveTo(Math.random() * 400, Math.random() * 200);
+                        for (let j = 0; j < points; j++) {
+                            coloringCtx.quadraticCurveTo(
+                                Math.random() * 400, Math.random() * 200,
+                                Math.random() * 400, Math.random() * 200
+                            );
+                        }
+                        coloringCtx.closePath();
+                    }
+                    coloringCtx.stroke();
+                }
+            }
+            drawRandomAbstractShapes();
+
+            function floodFill(x, y, fillColor) {
+                const imageData = coloringCtx.getImageData(0, 0, coloringCanvas.width, coloringCanvas.height);
+                const data = imageData.data;
+                const targetColor = getPixelColor(x, y, data);
+                if (colorsMatch(targetColor, hexToRgb(fillColor))) return;
+
+                const stack = [[x, y]];
+                while (stack.length) {
+                    const [currX, currY] = stack.pop();
+                    const pos = (currY * coloringCanvas.width + currX) * 4;
+                    if (currX < 0 || currX >= coloringCanvas.width || currY < 0 || currY >= coloringCanvas.height) continue;
+                    if (!colorsMatch(getPixelColor(currX, currY, data), targetColor)) continue;
+
+                    data[pos] = hexToRgb(fillColor)[0];
+                    data[pos + 1] = hexToRgb(fillColor)[1];
+                    data[pos + 2] = hexToRgb(fillColor)[2];
+                    data[pos + 3] = 255;
+
+                    stack.push([currX + 1, currY]);
+                    stack.push([currX - 1, currY]);
+                    stack.push([currX, currY + 1]);
+                    stack.push([currX, currY - 1]);
+                }
+                coloringCtx.putImageData(imageData, 0, 0);
+                playSound(sounds.fill);
+            }
+
+            function getPixelColor(x, y, data) {
+                const pos = (y * coloringCanvas.width + x) * 4;
+                return [data[pos], data[pos + 1], data[pos + 2], data[pos + 3]];
+            }
+
+            function colorsMatch(c1, c2) {
+                return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2] && c1[3] === c2[3];
+            }
+
+            function hexToRgb(hex) {
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                return [r, g, b, 255];
+            }
+
+            coloringCanvas.addEventListener('click', (e) => {
+                const rect = coloringCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                floodFill(Math.floor(x), Math.floor(y), selectedColor);
+            });
+            coloringCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const rect = coloringCanvas.getBoundingClientRect();
+                const x = e.touches[0].clientX - rect.left;
+                const y = e.touches[0].clientY - rect.top;
+                floodFill(Math.floor(x), Math.floor(y), selectedColor);
+            });
+
+            clearColoringBtn.addEventListener('click', () => {
+                drawRandomAbstractShapes();
+                playSound(sounds.btn1);
+            });
+
+            // Área de rabiscos
+            const scribbleCanvas = document.getElementById('scribble-canvas');
+            const scribbleCtx = scribbleCanvas.getContext('2d');
+            const lineWidth = document.getElementById('line-width');
+            const clearScribbleBtn = document.getElementById('clear-scribble');
+            scribbleCanvas.width = 400;
+            scribbleCanvas.height = 200;
+            let isDrawing = false;
+
+            scribbleCtx.lineCap = 'round';
+            scribbleCtx.lineJoin = 'round';
+
+            function startDrawing(e) {
+                isDrawing = true;
+                scribbleCtx.beginPath();
+                scribbleCtx.moveTo(e.offsetX || e.touches[0].clientX - scribbleCanvas.offsetLeft, 
+                                  e.offsetY || e.touches[0].clientY - scribbleCanvas.offsetTop);
+                scribbleCtx.strokeStyle = selectedColor;
+                scribbleCtx.lineWidth = lineWidth.value;
+                playSound(sounds.knob3);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                const x = e.offsetX || e.touches[0].clientX - scribbleCanvas.offsetLeft;
+                const y = e.offsetY || e.touches[0].clientY - scribbleCanvas.offsetTop;
+                scribbleCtx.lineTo(x, y);
+                scribbleCtx.stroke();
+            }
+
+            function stopDrawing() { isDrawing = false; }
+
+            scribbleCanvas.addEventListener('mousedown', startDrawing);
+            scribbleCanvas.addEventListener('mousemove', draw);
+            scribbleCanvas.addEventListener('mouseup', stopDrawing);
+            scribbleCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); });
+            scribbleCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+            scribbleCanvas.addEventListener('touchend', stopDrawing);
+
+            clearScribbleBtn.addEventListener('click', () => {
+                scribbleCtx.clearRect(0, 0, scribbleCanvas.width, scribbleCanvas.height);
+                playSound(sounds.btn1);
+            });
+
+            // Piano
+            const piano = document.getElementById('piano');
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4'];
+            const blackNotes = [1, 3, 6, 8, 10];
+
+            notes.forEach((note, index) => {
+                const key = document.createElement('button');
+                key.className = `key ${blackNotes.includes(index) ? 'black' : 'white'}`;
+                key.dataset.note = note;
+                key.style.background = blackNotes.includes(index) 
+                    ? `hsl(${index * 30}, 50%, 30%)` 
+                    : `hsl(${index * 30}, 70%, 90%)`;
+                piano.appendChild(key);
+
+                key.addEventListener('click', () => playNote(note));
+                key.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    playNote(note);
+                });
+            });
+
+            function playNote(note) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.type = 'triangle';
+                oscillator.frequency.value = noteToFrequency(note);
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 500);
+            }
+
+            function noteToFrequency(note) {
+                const frequencies = {
+                    'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
+                    'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00,
+                    'G#4': 415.30, 'A4': 440.00, 'A#4': 466.16, 'B4': 493.88
+                };
+                return frequencies[note];
+            }
         });
-
-        function playNote(note) {
-            const oscillator = audioContext.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.value = noteToFrequency(note);
-            oscillator.connect(audioContext.destination);
-            oscillator.start();
-            setTimeout(() => oscillator.stop(), 300);
-        }
-
-        function noteToFrequency(note) {
-            const frequencies = {
-                'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
-                'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00,
-                'G#4': 415.30, 'A4': 440.00, 'A#4': 466.16, 'B4': 493.88,
-                'C5': 523.25
-            };
-            return frequencies[note];
-        }
     </script>
 </body>
 </html>
