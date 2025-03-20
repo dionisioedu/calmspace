@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFillFrequency = 350;
     const backgroundMusic = new Audio('music/Sad Piano Wind - Coyote Hearing.mp3');
     backgroundMusic.loop = true;
-    const sliderVolumes = [0.3, 0.3, 0.3];
+    const sliderVolumes = [0.1, 0.1, 0.1];
   
     // === Global Painting Color (Controlled by Color Picker Only) ===
     let selectedColor = 'hsl(270, 70%, 70%)';
