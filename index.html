@@ -1,69 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CalmSpace</title>
-    <!-- AdSense Script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6858130394830057"
-            crossorigin="anonymous"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalmSpace</title>
+  <!-- AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6858130394830057" crossorigin="anonymous"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>CalmSpace</h1>
-        <p>A space to relax and have fun</p>
-    </header>
-    <div class="container">
-        <div class="row sound-buttons-row">
-            <button class="sound-button" id="btn5"></button>
-            <button class="sound-button" id="btn6"></button>
-            <button class="sound-button" id="btn7"></button>
-            <button class="sound-button" id="btn8"></button>
-        </div>
-        <div class="row sound-buttons-row">
-            <button class="sound-button" id="btn1"></button>
-            <button class="sound-button" id="btn2"></button>
-            <button class="sound-button" id="btn3"></button>
-            <button class="sound-button" id="btn4"></button>
-        </div>
-        <div class="row">
-            <div class="coloring-area"><canvas id="coloring-canvas"></canvas></div>
-        </div>
-        <div class="controls">
-            <button class="clear-btn" id="clear-coloring">Next Image</button>
-            <div class="color-picker" id="color-picker"></div>
-        </div>
-        <div class="row">
-            <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider1"></div>
-            <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider2"></div>
-            <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider3"></div>
-        </div>
-        <div class="row">
-            <div class="scribble-area"><canvas id="scribble-canvas"></canvas></div>
-        </div>
-        <div class="controls">
-            <button class="clear-btn" id="clear-scribble">Clear Scribbles</button>
-            <input type="range" id="line-width" min="1" max="20" value="5">
-        </div>
-        <div class="row">
-            <div class="piano" id="piano"></div>
-        </div>
+  <header>
+    <h1>CalmSpace</h1>
+    <p>A space to relax and have fun</p>
+  </header>
+  <div class="container">
+    <div class="row sound-buttons-row">
+      <button class="sound-button" id="btn5"></button>
+      <button class="sound-button" id="btn6"></button>
+      <button class="sound-button" id="btn7"></button>
+      <button class="sound-button" id="btn8"></button>
     </div>
-    <div class="content-section">
-        <h2>Welcome to CalmSpace</h2>
-        <p>CalmSpace is your go-to destination for relaxation and creativity. Designed to provide a soothing and interactive experience, this website offers a variety of tools to help you unwind and express yourself. Whether you're clicking colorful buttons that play calming sounds, adjusting sliders for a satisfying tactile experience, coloring abstract shapes, scribbling freely, or playing a virtual piano, CalmSpace has something for everyone.</p>
-        <p>Our mission is to create a digital sanctuary where you can take a break from the hustle and bustle of daily life. Each feature is carefully crafted to engage your senses and bring a sense of peace and joy. The sound buttons, for instance, offer a delightful auditory experience with every click, while the coloring and scribbling areas let you unleash your inner artist. The piano adds a musical touch, allowing you to experiment with notes and create your own melodies.</p>
-        <p>Why choose CalmSpace? Because we believe in the power of simple, mindful activities to improve your well-being. Studies show that engaging in creative tasks can reduce stress and enhance focus. Whether you're here for a quick five-minute break or a longer session of exploration, CalmSpace adapts to your needs. Our responsive design ensures that you can enjoy it on any device, from desktops to smartphones.</p>
-        <p>We’re committed to making CalmSpace a safe and enjoyable space for all users. There’s no pressure here—just pure, unfiltered fun and relaxation. So go ahead, explore the features, and let CalmSpace be your personal retreat whenever you need it most.</p>
+    <div class="row sound-buttons-row">
+      <button class="sound-button" id="btn1"></button>
+      <button class="sound-button" id="btn2"></button>
+      <button class="sound-button" id="btn3"></button>
+      <button class="sound-button" id="btn4"></button>
     </div>
-    <footer>
-        <p>Created with ❤️ by <a href="https://dionisio.dev" target="_blank">Dionisio</a> | 2025</p>
-    </footer>
-    <button class="mute-btn" id="mute-btn">Mute</button>
-
-    <script src="scripts.js"></script>
+    <div class="row">
+      <div class="coloring-area"><canvas id="coloring-canvas"></canvas></div>
+    </div>
+    <div class="controls">
+      <button class="clear-btn" id="clear-coloring">Next Image</button>
+      <div class="color-picker" id="color-picker"></div>
+    </div>
+    <div class="row">
+      <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider1"></div>
+      <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider2"></div>
+      <div class="slider-container"><input type="range" min="0" max="100" value="30" class="slider" id="slider3"></div>
+    </div>
+    <div class="row">
+      <div class="scribble-area"><canvas id="scribble-canvas"></canvas></div>
+    </div>
+    <div class="controls">
+      <button class="clear-btn" id="clear-scribble">Clear Scribbles</button>
+      <input type="range" id="line-width" min="1" max="20" value="5">
+    </div>
+    <div class="row">
+      <div class="piano" id="piano"></div>
+    </div>
+  </div>
+  <div class="content-section">
+    <h2>Welcome to CalmSpace</h2>
+    <p>CalmSpace is your go-to destination for relaxation and creativity. Designed to provide a soothing and interactive experience, this website offers a variety of tools to help you unwind and express yourself. Whether you're clicking colorful buttons that play calming sounds, adjusting sliders for a satisfying tactile experience, coloring abstract shapes, scribbling freely, or playing a virtual piano, CalmSpace has something for everyone.</p>
+    <p>Our mission is to create a digital sanctuary where you can take a break from the hustle and bustle of daily life. Each feature is carefully crafted to engage your senses and bring a sense of peace and joy. The sound buttons, for instance, offer a delightful auditory experience with every click, while the coloring and scribbling areas let you unleash your inner artist. The piano adds a musical touch, allowing you to experiment with notes and create your own melodies.</p>
+    <p>Why choose CalmSpace? Because we believe in the power of simple, mindful activities to improve your well-being. Studies show that engaging in creative tasks can reduce stress and enhance focus. Whether you're here for a quick five-minute break or a longer session of exploration, CalmSpace adapts to your needs. Our responsive design ensures that you can enjoy it on any device, from desktops to smartphones.</p>
+    <p>We’re committed to making CalmSpace a safe and enjoyable space for all users. There’s no pressure here—just pure, unfiltered fun and relaxation. So go ahead, explore the features, and let CalmSpace be your personal retreat whenever you need it most.</p>
+  </div>
+  <footer>
+    <p>Created with ❤️ by <a href="https://dionisio.dev" target="_blank">Dionisio</a> | 2025</p>
+  </footer>
+  <button class="mute-btn" id="mute-btn">Mute</button>
+  
+  <script src="scripts.js"></script>
 </body>
 </html>
