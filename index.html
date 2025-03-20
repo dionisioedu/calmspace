@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,11 +27,19 @@
 
         header {
             background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
+            padding: 8px;
             text-align: center;
             color: #fff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             width: 100%;
+        }
+        header h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        header p {
+            font-size: 0.9em;
+            margin: 2px 0 0;
         }
 
         footer {
@@ -187,22 +195,39 @@
         }
         .mute-btn:hover { background: #dc2626; }
 
+        .content-section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #333;
+            text-align: justify;
+        }
+        .content-section h2 {
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
         @media (max-width: 600px) {
             .sound-button, .knob { width: 50px; height: 50px; }
             .scribble-area, .coloring-area { width: 90vw; height: 150px; }
             .key.white { width: 30px; height: 100px; }
             .key.black { width: 20px; height: 60px; margin-left: -10px; margin-right: -10px; }
-            h1 { font-size: 1.5em; }
-            p { font-size: 0.9em; }
+            header h1 { font-size: 1.2em; }
+            header p { font-size: 0.8em; }
+            footer p { font-size: 0.8em; }
             .row { gap: 10px; }
             .controls { gap: 10px; }
+            .content-section { margin: 10px; padding: 15px; }
         }
     </style>
 </head>
 <body>
     <header>
         <h1>CalmSpace</h1>
-        <p>Um espaço para relaxar e se divertir</p>
+        <p>A space to relax and have fun</p>
     </header>
     <div class="container">
         <div class="row">
@@ -214,7 +239,7 @@
             <div class="coloring-area"><canvas id="coloring-canvas"></canvas></div>
         </div>
         <div class="controls">
-            <button class="clear-btn" id="clear-coloring">Limpar Colorir</button>
+            <button class="clear-btn" id="clear-coloring">Clear Coloring</button>
             <div class="color-picker" id="color-picker"></div>
         </div>
         <div class="row">
@@ -226,21 +251,27 @@
             <div class="scribble-area"><canvas id="scribble-canvas"></canvas></div>
         </div>
         <div class="controls">
-            <button class="clear-btn" id="clear-scribble">Limpar Rabiscos</button>
+            <button class="clear-btn" id="clear-scribble">Clear Scribbles</button>
             <input type="range" id="line-width" min="1" max="20" value="5">
         </div>
         <div class="row">
             <div class="piano" id="piano"></div>
         </div>
     </div>
+    <div class="content-section">
+        <h2>Welcome to CalmSpace</h2>
+        <p>CalmSpace is your go-to destination for relaxation and creativity. Designed to provide a soothing and interactive experience, this website offers a variety of tools to help you unwind and express yourself. Whether you're clicking colorful buttons that play calming sounds, rotating knobs for a satisfying tactile experience, coloring abstract shapes, scribbling freely, or playing a virtual piano, CalmSpace has something for everyone.</p>
+        <p>Our mission is to create a digital sanctuary where you can take a break from the hustle and bustle of daily life. Each feature is carefully crafted to engage your senses and bring a sense of peace and joy. The sound buttons, for instance, offer a delightful auditory experience with every click, while the coloring and scribbling areas let you unleash your inner artist. The piano adds a musical touch, allowing you to experiment with notes and create your own melodies.</p>
+        <p>Why choose CalmSpace? Because we believe in the power of simple, mindful activities to improve your well-being. Studies show that engaging in creative tasks can reduce stress and enhance focus. Whether you're here for a quick five-minute break or a longer session of exploration, CalmSpace adapts to your needs. Our responsive design ensures that you can enjoy it on any device, from desktops to smartphones.</p>
+        <p>We’re committed to making CalmSpace a safe and enjoyable space for all users. There’s no pressure here—just pure, unfiltered fun and relaxation. So go ahead, explore the features, and let CalmSpace be your personal retreat whenever you need it most.</p>
+    </div>
     <footer>
-        <p>Criado com ❤️ por <a href="https://dionisio.dev" target="_blank">Dionísio</a> com xAI | 2025</p>
+        <p>Created with ❤️ by <a href="https://dionisio.dev" target="_blank">Dionísio</a> 2025</p>
     </footer>
     <button class="mute-btn" id="mute-btn">Mute</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Sons
             const sounds = {
                 btn1: new Audio('sounds/button-38.mp3'),
                 btn2: new Audio('sounds/bloop-1.mp3'),
@@ -252,7 +283,6 @@
             };
             let isMuted = false;
 
-            // Mute
             const muteBtn = document.getElementById('mute-btn');
             if (muteBtn) {
                 muteBtn.addEventListener('click', () => {
@@ -261,7 +291,7 @@
                     muteBtn.style.background = isMuted ? '#22c55e' : '#ef4444';
                 });
             } else {
-                console.error('Elemento mute-btn não encontrado!');
+                console.error('Mute button not found!');
             }
 
             function playSound(sound) {
@@ -271,7 +301,6 @@
                 }
             }
 
-            // Botões sonoros com mudança de cor
             document.querySelectorAll('.sound-button').forEach(btn => {
                 btn.style.background = `hsl(${Math.random() * 360}, 70%, 70%)`;
                 btn.addEventListener('click', () => {
@@ -285,7 +314,6 @@
                 });
             });
 
-            // Knobs giratórios
             function setupKnob(knobId, soundKey) {
                 const knob = document.getElementById(knobId);
                 let isDragging = false;
@@ -315,7 +343,6 @@
             setupKnob('knob2', 'knob2');
             setupKnob('knob3', 'knob3');
 
-            // Color Picker Customizado
             const colorPicker = document.getElementById('color-picker');
             const colors = [
                 '#ff6b6b', '#4ecdc4', '#45b7d1', '#96c93d', '#f7d794',
@@ -336,7 +363,6 @@
             });
             colorPicker.children[0].classList.add('selected');
 
-            // Área de colorir
             const coloringCanvas = document.getElementById('coloring-canvas');
             const coloringCtx = coloringCanvas.getContext('2d');
             const clearColoringBtn = document.getElementById('clear-coloring');
@@ -348,13 +374,12 @@
                 coloringCtx.strokeStyle = '#000';
                 coloringCtx.lineWidth = 1;
 
-                const shapeCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 formas
+                const shapeCount = Math.floor(Math.random() * 3) + 2;
                 for (let i = 0; i < shapeCount; i++) {
                     const shapeType = Math.floor(Math.random() * 4);
                     coloringCtx.beginPath();
 
                     if (shapeType === 0) {
-                        // Curva suave horizontal
                         const y = Math.random() * coloringCanvas.height;
                         coloringCtx.moveTo(0, y);
                         coloringCtx.quadraticCurveTo(200, y + (Math.random() * 100 - 50), 400, y);
@@ -362,7 +387,6 @@
                         coloringCtx.lineTo(0, coloringCanvas.height);
                         coloringCtx.closePath();
                     } else if (shapeType === 1) {
-                        // Círculo ondulado
                         const cx = Math.random() * 400;
                         const cy = Math.random() * 200;
                         const r = Math.random() * 50 + 20;
@@ -376,7 +400,6 @@
                         }
                         coloringCtx.closePath();
                     } else if (shapeType === 2) {
-                        // Ondas verticais
                         const xStart = Math.random() * 400;
                         coloringCtx.moveTo(xStart, 0);
                         for (let x = xStart; x < xStart + 100 && x < 400; x += 20) {
@@ -386,7 +409,6 @@
                         coloringCtx.lineTo(xStart, coloringCanvas.height);
                         coloringCtx.closePath();
                     } else {
-                        // Forma orgânica
                         const points = Math.floor(Math.random() * 5) + 3;
                         coloringCtx.moveTo(Math.random() * 400, Math.random() * 200);
                         for (let j = 0; j < points; j++) {
@@ -464,7 +486,6 @@
                 playSound(sounds.btn1);
             });
 
-            // Área de rabiscos
             const scribbleCanvas = document.getElementById('scribble-canvas');
             const scribbleCtx = scribbleCanvas.getContext('2d');
             const lineWidth = document.getElementById('line-width');
@@ -508,7 +529,6 @@
                 playSound(sounds.btn1);
             });
 
-            // Piano
             const piano = document.getElementById('piano');
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const notes = ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4'];
