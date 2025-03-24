@@ -199,6 +199,88 @@ document.addEventListener('DOMContentLoaded', () => {
         handler();
       });
     });
+
+    const bloopSound1 = new Audio('sounds/bloop-1.mp3');
+    const bloopSound2 = new Audio('sounds/bloop-2.mp3');
+    const bloopBtn1 = document.getElementById('bloop1');
+    const bloopBtn2 = document.getElementById('bloop2');
+
+    bloopBtn1.addEventListener('click', playBloop1);
+    bloopBtn2.addEventListener('click', playBloop2);
+
+    function playBloop1(event) {
+      // Stop current sound and reset
+      bloopSound1.pause(); // Pausa o som atual
+      bloopSound1.currentTime = 0; // Volta ao início
+      bloopSound1.play(); // Toca novamente
+
+      // Create ripple effect
+      const button = event.target;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+
+      // Position ripple at click location
+      const rect = button.getBoundingClientRect();
+      ripple.style.width = ripple.style.height = `${diameter}px`;
+      ripple.style.left = `${event.clientX - rect.left - radius}px`;
+      ripple.style.top = `${event.clientY - rect.top - radius}px`;
+
+      button.appendChild(ripple);
+
+      // Remove ripple after animation
+      ripple.addEventListener('animationend', () => {
+          ripple.remove();
+      });
+    }
+    function playBloop2(event) {
+      // Stop current sound and reset
+      bloopSound2.pause(); // Pausa o som atual
+      bloopSound2.currentTime = 0; // Volta ao início
+      bloopSound2.play(); // Toca novamente
+
+      // Create ripple effect
+      const button = event.target;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+
+      // Position ripple at click location
+      const rect = button.getBoundingClientRect();
+      ripple.style.width = ripple.style.height = `${diameter}px`;
+      ripple.style.left = `${event.clientX - rect.left - radius}px`;
+      ripple.style.top = `${event.clientY - rect.top - radius}px`;
+
+      button.appendChild(ripple);
+
+      // Remove ripple after animation
+      ripple.addEventListener('animationend', () => {
+          ripple.remove();
+      });
+    }
+
+    const stringSound = new Audio('sounds/button-15.mp3');
+    const stringContainer = document.getElementById('string-container');
+    stringContainer.addEventListener('click', (e) => {
+      const string = document.querySelector('.string');
+
+      stringSound.pause(); // Pausa o som atual
+      stringSound.currentTime = 0; // Volta ao início
+      stringSound.play(); // Toca novamente
+
+      // Remove a classe vibrating para reiniciar a animação
+      string.classList.remove('vibrating');
+      
+      // Força um reflow para reiniciar a animação
+      void string.offsetWidth;
+      
+      // Adiciona a classe para iniciar a vibração
+      string.classList.add('vibrating');
+    });
   
     // === Slider Setup (Vertical) ===
     let sliderSoundTimeout;
